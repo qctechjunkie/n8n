@@ -1,0 +1,26 @@
+# Environment variables
+.env
+
+# n8n data
+n8n_data/
+.n8n/
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+temp/
+tmp/

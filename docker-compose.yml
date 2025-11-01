@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    environment:
+      - N8N_PROTOCOL=${N8N_PROTOCOL:-http}
+      - N8N_HOST=${N8N_HOST:-localhost}
+      - N8N_PORT=${N8N_PORT:-5678}
+      - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE:-true}
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
+      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE:-America/New_York}
+      - TZ=${TZ:-America/New_York}
+      - EXECUTIONS_MODE=${EXECUTIONS_MODE:-regular}
+      - WEBHOOK_URL=${WEBHOOK_URL:-http://localhost:5678/}
+      - N8N_METRICS=${N8N_METRICS:-false}
+      - N8N_LOG_LEVEL=${N8N_LOG_LEVEL:-info}
+      - N8N_LOG_OUTPUT=${N8N_LOG_OUTPUT:-console}
+    volumes:
+      - n8n_data:/home/node/.n8n
+      - ./n8n_data:/files
+    networks:
+      - n8n-network
+    # Uncomment to use PostgreSQL instead of SQLite
+    # depends_on:
+    #   - postgres
+
+  # Uncomment this section to use PostgreSQL database
+  # postgres:
+  #   image: postgres:15-alpine
+  #   container_name: n8n-postgres
+  #   restart: unless-stopped
+  #   environment:
+  #     - POSTGRES_DB=${DB_POSTGRESDB_DATABASE:-n8n}
+  #     - POSTGRES_USER=${DB_POSTGRESDB_USER:-n8n}
+  #     - POSTGRES_PASSWORD=${DB_POSTGRESDB_PASSWORD:-n8n}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - n8n-network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U ${DB_POSTGRESDB_USER:-n8n}"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+
+networks:
+  n8n-network:
+    driver: bridge
+
+volumes:
+  n8n_data:
+    driver: local
+  # Uncomment if using PostgreSQL
+  # postgres_data:
+  #   driver: local
