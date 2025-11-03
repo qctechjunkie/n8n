@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   n8n:
@@ -27,28 +27,26 @@ services:
       - ./n8n_data:/files
     networks:
       - n8n-network
-    # Uncomment to use PostgreSQL instead of SQLite
-    # depends_on:
-    #   - postgres
+    depends_on:
+      - postgres
 
-  # Uncomment this section to use PostgreSQL database
-  # postgres:
-  #   image: postgres:15-alpine
-  #   container_name: n8n-postgres
-  #   restart: unless-stopped
-  #   environment:
-  #     - POSTGRES_DB=${DB_POSTGRESDB_DATABASE:-n8n}
-  #     - POSTGRES_USER=${DB_POSTGRESDB_USER:-n8n}
-  #     - POSTGRES_PASSWORD=${DB_POSTGRESDB_PASSWORD:-n8n}
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   networks:
-  #     - n8n-network
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U ${DB_POSTGRESDB_USER:-n8n}"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
+  postgres:
+    image: postgres:15-alpine
+    container_name: n8n-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${DB_POSTGRESDB_DATABASE:-n8n}
+      - POSTGRES_USER=${DB_POSTGRESDB_USER:-n8n}
+      - POSTGRES_PASSWORD=${DB_POSTGRESDB_PASSWORD:-n8n}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - n8n-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_POSTGRESDB_USER:-n8n}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   n8n-network:
@@ -57,6 +55,5 @@ networks:
 volumes:
   n8n_data:
     driver: local
-  # Uncomment if using PostgreSQL
-  # postgres_data:
-  #   driver: local
+  postgres_data:
+    driver: local
