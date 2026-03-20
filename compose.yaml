@@ -38,6 +38,7 @@ services:
       - DB_POSTGRESDB_DATABASE=${DB_POSTGRESDB_DATABASE:-n8n}
       - DB_POSTGRESDB_USER=${DB_POSTGRESDB_USER:-n8n}
       - DB_POSTGRESDB_PASSWORD=${DB_POSTGRESDB_PASSWORD}
+      - NODES_EXCLUDE=${NODES_EXCLUDE:-["n8n-nodes-base.executeCommand", "n8n-nodes-base.readWriteFile", "n8n-nodes-base.httpRequest"]}
     volumes:
       - ${DOCKER_DATA_PATH}/data:/home/node/.n8n
       - ${DOCKER_DATA_PATH}/files:/files
